@@ -20,19 +20,39 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'zefei/buftabs'
 Bundle 'kien/ctrlp.vim'
 " https://bitbucket.org/Haroogan/vim-youcompleteme-for-windows/downloads/vim-ycm-cf62110-windows-x64.zip
-let g:ycm_server_use_vim_stdout=1
-Bundle 'Valloric/YouCompleteMe'
+" let g:ycm_server_use_vim_stdout=1
+" Bundle 'Valloric/YouCompleteMe'
 Bundle 'tpope/vim-surround'
+" Snippets {{{
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'tomtom/tlib_vim'
+Bundle 'garbas/vim-snipmate'
+Bundle 'honza/vim-snippets'
+" }}}
+" Bundle 'xolox/vim-misc'
+" Bundle 'xolox/vim-session'
+
+Bundle 'amiorin/vim-project'
+call project#rc('/')
+Bundle 'Lokaltog/vim-easymotion'
+let g:EasyMotion_leader_key = '<Leader>'
+
+Bundle 'vim-scripts/Visual-Mark'
 " }}}
 
+Bundle 'chriskempson/vim-tomorrow-theme'
+Bundle 'nanotech/jellybeans.vim'
+
 " Language support {{{
-Bundle 'kchmck/vim-coffee-script'
+Bundle 'AndrewRadev/vim-coffee-script'
+Bundle 'AndrewRadev/coffee_tools.vim'
 Bundle 'groenewege/vim-less'
 " }}}
 
 " Visual Enhancements {{{
-set guifont=Consolas,10
-color Tomorrow-Night
+set guifont=Consolas:h11
+" color Tomorrow-Night
+color jellybeans
 
 " Some color fine tuning {{{
 hi NonText                 guifg=#4a4a59 guibg=NONE
@@ -67,7 +87,10 @@ set softtabstop=4
 set noexpandtab
 set shiftround
 
-set noerrorbells
+" set novisualbell
+" set noerrorbells
+" set visualbell
+" set t_vb=
 
 
 " file specific tab settings {{{
@@ -91,11 +114,37 @@ set number
 set nowrap
 set autoindent
 set copyindent
-set showmatch
+set noshowmatch
 set ignorecase
 set smartcase
 set incsearch
-set hlsearch
+"set hlsearch
+
+" Session options {{{
+"set sessionoptions=resize,curdir,localoptions,unix,winpos,winsize
+"set sessionoptions-=buffers
+"set sessionoptions-=blank
+
+fu! SaveSess()
+    execute 'mksession! ' . getcwd() . '/.session.vim'
+endfunction
+
+fu! RestoreSess()
+if filereadable(getcwd() . '/.session.vim')
+    execute 'so ' . getcwd() . '/.session.vim'
+    if bufexists(1)
+        for l in range(1, bufnr('$'))
+            if bufwinnr(l) == -1
+                exec 'sbuffer ' . l
+            endif
+        endfor
+    endif
+endif
+endfunction
+
+"autocmd VimLeave * call SaveSess()
+"autocmd VimEnter * call RestoreSess()
+" }}}
 " }}}
 
 
@@ -128,13 +177,15 @@ imap <4-MiddleMouse> <Nop>
 " Set auto command to automatically wipe out trailing spaces for these files
 autocmd BufWritePre *.php,*.js,*.css,*.html,*.xml,*.sh,*.less,*.coffee :call <SID>StripTrailingWhitespaces()
 
+noremap <F3> :bp<Enter>
+noremap <F4> :bn<Enter>
 
 " toggle search highlighting
-nnoremap <F3> :set hlsearch!<Enter>
-set pastetoggle=<F2>
+nnoremap <F12> :set hlsearch!<Enter>
+" set pastetoggle=<F2>
 
 
-map <C-W> :Bclose<Enter> " delete current buffer
+map <Leader>x :Bclose<Enter> " delete current buffer
 "map <C-S> :w<Enter> " save current file
 
 " easy window movement
@@ -181,4 +232,17 @@ function! <SID>StripTrailingWhitespaces()
   call cursor(l, c)
 endfunction
 " }}}
+
+let g:project_use_nerdtree = 1
+
+Project '/chatr/client', 'chatr-client'
+Project '/chatr/server', 'chatr-server'
+" Project '~/vimfiles/vimrc'		, 'vimrc'
+
+fu! s:setWinDefaultSizePos()
+  exe "set lines=53 columns=110"
+  exe "winpos 5 5"
+endfu
+
+command! WinDef call s:setWinDefaultSizePos()
 

@@ -239,10 +239,11 @@ Project '/chatr/client', 'chatr-client'
 Project '/chatr/server', 'chatr-server'
 " Project '~/vimfiles/vimrc'		, 'vimrc'
 
-fu! s:setWinDefaultSizePos()
-  exe "set lines=53 columns=110"
+fu! s:setWinDefaultSizePos(lines, cols)
+  exe "set lines=" . a:lines . " columns=" . a:cols
   exe "winpos 5 5"
 endfu
 
-command! WinDef call s:setWinDefaultSizePos()
+command! WinDef call s:setWinDefaultSizePos(53, 110)
+command! WinDef1 call s:setWinDefaultSizePos(72, 143)
 

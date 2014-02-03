@@ -38,6 +38,7 @@ Bundle 'Lokaltog/vim-easymotion'
 let g:EasyMotion_leader_key = '<Leader>'
 
 Bundle 'vim-scripts/Visual-Mark'
+Bundle 'gregsexton/MatchTag'
 " }}}
 
 Bundle 'chriskempson/vim-tomorrow-theme'
@@ -199,7 +200,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " builds
-nnoremap <F7> :Shell cake sbuild<Enter>
+nnoremap <C-B> :Shell cake sbuild<Enter>
 
 function! s:ExecuteInShell(command)
   let command = join(map(split(a:command), 'expand(v:val)'))
